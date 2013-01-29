@@ -52,7 +52,7 @@ ifeq ($(ARCH_ARM_HAVE_NEON),true)
 endif
 
 # Use graphite optimizations to moderately improve skia performance
-LOCAL_CFLAGS := \
+LOCAL_CFLAGS += \
 	-floop-interchange \
 	-floop-strip-mine \
 	-floop-block \
