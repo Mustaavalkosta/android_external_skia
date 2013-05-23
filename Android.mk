@@ -278,6 +278,9 @@ LOCAL_SRC_FILES += \
 	src/opts/SkUtils_opts_none.cpp
 endif
 
+# Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=54781
+LOCAL_CFLAGS += $(call cc-ifversion, -eq, 48, -fno-tree-ter)
+
 # these are for emoji support, needed by webkit
 LOCAL_SRC_FILES += \
 	emoji/EmojiFont.cpp
@@ -355,6 +358,11 @@ LOCAL_CFLAGS += -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1
 ifeq ($(NO_FALLBACK_FONT),true)
 	LOCAL_CFLAGS += -DNO_FALLBACK_FONT
 endif
+
+# FIXME this should really be limited to files that need it, such as
+# src/utils/SkCamera.cpp -- pretty bad violations going on in there,
+# but most of the rest of skia is good
+LOCAL_CFLAGS += -fno-strict-aliasing
 
 LOCAL_LDLIBS += -lpthread
 
