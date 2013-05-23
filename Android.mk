@@ -258,12 +258,21 @@ LOCAL_SRC_FILES:= \
 	src/utils/SkSfntUtils.cpp \
 	src/utils/SkUnitMappers.cpp
 
+ifeq ($(BOARD_USES_SKTEXTBOX),true)
+LOCAL_SRC_FILES += \
+	src/views/SkTextBox.cpp
+endif
+
 ifeq ($(TARGET_ARCH),arm)
 
 ifeq ($(ARCH_ARM_HAVE_NEON),true)
 LOCAL_SRC_FILES += \
 	src/opts/memset16_neon.S \
 	src/opts/memset32_neon.S
+
+LOCAL_CFLAGS += -DNEON_BLITANTIH
+LOCAL_SRC_FILES += \
+	src/core/asm/SkBlitter_RGB16_NEON.S
 endif
 
 LOCAL_SRC_FILES += \
@@ -463,7 +472,7 @@ LOCAL_C_INCLUDES += \
   $(LOCAL_PATH)/src/core \
   $(LOCAL_PATH)/src/gpu \
   $(LOCAL_PATH)/third_party/glu \
-  frameworks/base/opengl/include
+  frameworks/native/opengl/include
 
 LOCAL_LDLIBS += -lpthread
 
@@ -501,7 +510,7 @@ LOCAL_SHARED_LIBRARIES := \
 LOCAL_C_INCLUDES += \
   $(LOCAL_PATH)/third_party/glu \
   $(LOCAL_PATH)/third_party/glu/libtess \
-  frameworks/base/opengl/include
+  frameworks/native/opengl/include
 
 LOCAL_LDLIBS += -lpthread
 
